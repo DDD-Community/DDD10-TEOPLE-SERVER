@@ -43,6 +43,12 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+        // Kotest
+        testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+        testImplementation("io.kotest:kotest-assertions-core:5.5.5")
+        testImplementation("io.kotest:kotest-property:5.5.5")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
     }
 }
 

@@ -1,10 +1,10 @@
-package com.ddd.teople.bootstrap
+package com.ddd.teople
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class BootstrapApplicationTests {
+class ApplicationTests {
 
     @Test
     fun contextLoads() {

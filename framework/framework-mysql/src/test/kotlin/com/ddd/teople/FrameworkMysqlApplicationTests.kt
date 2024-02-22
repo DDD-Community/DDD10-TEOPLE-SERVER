@@ -1,10 +1,10 @@
-package com.ddd.teople.application
+package com.ddd.teople
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class ApplicationTests {
+class FrameworkMysqlApplicationTests {
 
     @Test
     fun contextLoads() {

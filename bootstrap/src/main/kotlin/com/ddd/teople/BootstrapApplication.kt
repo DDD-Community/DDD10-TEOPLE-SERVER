@@ -1,11 +1,11 @@
-package com.ddd.teople.frameworkmysql
+package com.ddd.teople
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class FrameworkMysqlApplication
+class BootstrapApplication
 
 fun main(args: Array<String>) {
-    runApplication<FrameworkMysqlApplication>(*args)
+    runApplication<BootstrapApplication>(*args)
 }
