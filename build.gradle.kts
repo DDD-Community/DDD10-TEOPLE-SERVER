@@ -5,6 +5,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("kapt") version "1.9.22"
 }
 
 java {
@@ -37,6 +39,8 @@ subprojects {
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
         plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.jetbrains.kotlin.plugin.jpa")
+        plugin("org.jetbrains.kotlin.kapt")
     }
 
     dependencies {
@@ -49,6 +53,16 @@ subprojects {
         testImplementation("io.kotest:kotest-assertions-core:5.5.5")
         testImplementation("io.kotest:kotest-property:5.5.5")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
+    }
+
+    noArg {
+        annotation("jakarta.persistence.Entity")
+    }
+
+    allOpen {
+        annotation("javax.persistence.Entity")
+        annotation("javax.persistence.Embeddable")
+        annotation("javax.persistence.MappedSuperclass")
     }
 }
 

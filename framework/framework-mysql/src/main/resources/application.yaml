@@ -1,7 +1,10 @@
+
+---
+
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: default
   jpa:
     show-sql: true
     hibernate:
@@ -23,3 +26,5 @@ mysql:
     url: jdbc:mysql://localhost:3306/TEOPLE?serverTimezone=UTC
     username: root
     password: root
+
+---

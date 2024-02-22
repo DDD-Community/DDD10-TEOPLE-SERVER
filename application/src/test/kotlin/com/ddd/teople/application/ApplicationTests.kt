@@ -1,13 +1,13 @@
-package com.ddd.teople
+package com.ddd.teople.application
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class FrameworkMysqlApplicationTests {
+class ApplicationTests {
 
     fun main(args: Array<String>) {
-        runApplication<FrameworkMysqlApplicationTests>(*args)
+        runApplication<ApplicationTests>(*args)
     }
 
 }
