@@ -2,7 +2,7 @@ package com.ddd.teople.bootstrap.api.user.dto
 
 import java.io.Serializable
 
-data class RegisterResponse(
+data class RegisterUserResponse(
     val coupleId: String,
     val userId: String,
     val coupleCode: String,
@@ -10,8 +10,8 @@ data class RegisterResponse(
 ): Serializable {
 
     companion object {
-        fun of(coupleId: String, userId: String, coupleCode: String, accessToken: String): RegisterResponse =
-            RegisterResponse(
+        fun of(coupleId: String, userId: String, coupleCode: String, accessToken: String): RegisterUserResponse =
+            RegisterUserResponse(
                 coupleId = coupleId,
                 userId = userId,
                 coupleCode = coupleCode,

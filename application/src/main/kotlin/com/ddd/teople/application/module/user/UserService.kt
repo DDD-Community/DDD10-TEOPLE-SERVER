@@ -4,17 +4,15 @@ import com.ddd.teople.application.global.exception.CoupleCodeInvalidException
 import com.ddd.teople.application.global.utils.CodeUtils
 import com.ddd.teople.application.module.auth.port.`in`.GenerateTokenUseCase
 import com.ddd.teople.application.module.map.port.`in`.FindMapUseCase
-import com.ddd.teople.application.module.user.dto.RegisterUserCnd
-import com.ddd.teople.application.module.user.dto.RegisteredUserInfo
-import com.ddd.teople.application.module.user.dto.MyInfo
+import com.ddd.teople.application.module.user.dto.*
 import com.ddd.teople.application.module.user.port.`in`.FindUserUseCase
 import com.ddd.teople.application.module.user.port.`in`.RegisterUserUseCase
+import com.ddd.teople.application.module.user.port.`in`.UpdateUserUseCase
 import com.ddd.teople.application.module.user.port.out.LoadUserPort
 import com.ddd.teople.application.module.user.port.out.PostUserPort
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.Period
 import java.time.temporal.ChronoUnit
 
 @Service
@@ -24,7 +22,7 @@ class UserService(
 
     private val generateTokenUseCase: GenerateTokenUseCase,
     private val findMapUseCase: FindMapUseCase
-): RegisterUserUseCase, FindUserUseCase {
+): RegisterUserUseCase, FindUserUseCase, UpdateUserUseCase {
     private val log = LoggerFactory.getLogger(this::class.java)
 
     override fun register(input: RegisterUserCnd): RegisteredUserInfo {
@@ -56,7 +54,7 @@ class UserService(
 
             coupleId = coupleInfo.coupleId
             coupleCode = coupleInfo.coupleCode
-            postUserPort.updateCouple(coupleId = coupleId, userId = userId)
+            postUserPort.updateCoupleMappedAccountId(coupleId = coupleId, userId = userId)
         }
 
         // 엑세스토큰 발급
@@ -91,6 +89,29 @@ class UserService(
             myMap = myMap.map { MyInfo.MapItem.of(input = it) },
             yourMap = yourMap.map { MyInfo.MapItem.of(input = it) },
             togetherMap = togetherMap.map { MyInfo.MapItem.of(input = it) }
+        )
+    }
+
+    override fun update(input: UpdateUserCnd): UpdatedUserInfo {
+        if(!input.nickName.isNullOrEmpty()) {
+            postUserPort.updateUserNickName(userId = input.userId, nickName = input.nickName)
+        }
+
+        if(input.birth != null) {
+            postUserPort.updateUserBirth(userId = input.userId, birth = input.birth)
+        }
+
+        if(input.anniversary != null) {
+            postUserPort.updateCoupleAnniversary(coupleId = input.coupleId, anniversary = input.anniversary)
+        }
+
+        val coupleInfo = loadUserPort.findCoupleById(coupleId = input.coupleId)
+        val userInfo = loadUserPort.findUserInfoById(userId = input.userId)
+
+        return UpdatedUserInfo.of(
+            nickName = userInfo.nickName,
+            birth = userInfo.birth,
+            anniversary = coupleInfo.anniversaryDate
         )
     }
 }

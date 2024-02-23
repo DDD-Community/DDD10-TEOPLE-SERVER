@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.util.LinkedMultiValueMap
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @SpringBootTest(classes = [BootstrapApplicationTest::class])
@@ -50,5 +52,24 @@ class UserControllerTest(
                     .header(HttpHeaders.AUTHORIZATION, "Bearer $token")
             ).andDo(MockMvcResultHandlers.print()).andReturn()
         }
+    }
+
+    Given("먼저, 수정 성공") {
+        val params = LinkedMultiValueMap<String, String>().apply {
+//            add("nickName", "TEOPLE_TEST99")
+            add("birth", "20240101")
+//            add("anniversary", "20240101")
+        }
+        val token = "TEOPLE_TEST"
+
+        When("만약, ") {
+            mockMvc.perform(
+                MockMvcRequestBuilders.patch("/user")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer $token")
+                    .params(params)
+            ).andDo(MockMvcResultHandlers.print()).andReturn()
+        }
+
     }
 })

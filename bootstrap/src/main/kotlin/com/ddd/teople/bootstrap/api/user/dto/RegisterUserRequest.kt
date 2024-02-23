@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
-data class RegisterRequest(
+data class RegisterUserRequest(
     @field:NotBlank(message = "empty nickName")
     val nickName: String,
     @field:DateTimeFormat(pattern = "yyyyMMdd")

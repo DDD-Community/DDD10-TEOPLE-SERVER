@@ -31,8 +31,8 @@ class UserPersistenceAdapter(
         )
     }
 
-    override fun updateCouple(coupleId: String, userId: String) {
-        userRepository.updateCouple(coupleId = coupleId, userId = userId)
+    override fun updateCoupleMappedAccountId(coupleId: String, userId: String) {
+        userRepository.updateCoupleMappedAccountId(coupleId = coupleId, userId = userId)
     }
 
     override fun findCoupleByCode(coupleCode: String): CoupleInfo =
@@ -66,4 +66,15 @@ class UserPersistenceAdapter(
             ) }
             ?: throw DataNotFoundException("User Info Not Found")
 
+    override fun updateUserNickName(userId: String, nickName: String) {
+        userRepository.updateUserNickName(userId = userId, nickName = nickName)
+    }
+
+    override fun updateUserBirth(userId: String, birth: LocalDate) {
+        userRepository.updateUserBirth(userId = userId, birth = birth)
+    }
+
+    override fun updateCoupleAnniversary(coupleId: String, anniversary: LocalDate) {
+        userRepository.updateCoupleAnniversary(coupleId = coupleId, anniversary = anniversary)
+    }
 }

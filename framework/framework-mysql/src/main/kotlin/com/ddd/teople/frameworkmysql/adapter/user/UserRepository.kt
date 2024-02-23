@@ -5,7 +5,6 @@ import com.ddd.teople.frameworkmysql.entity.Couple
 import com.ddd.teople.frameworkmysql.entity.QAccount
 import com.ddd.teople.frameworkmysql.entity.QCouple
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.hibernate.internal.util.type.PrimitiveWrapperHelper.LongDescriptor
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -47,6 +46,24 @@ class UserRepository(
             .fetchFirst()
 
     @Transactional
+    fun updateUserNickName(userId: String, nickName: String): Long =
+        queryFactory
+            .update(account)
+            .set(account.nickName, nickName)
+            .set(account.updatedAt, LocalDateTime.now())
+            .where(account.accountId.eq(userId))
+            .execute()
+
+    @Transactional
+    fun updateUserBirth(userId: String, birth: LocalDate): Long =
+        queryFactory
+            .update(account)
+            .set(account.birth, birth)
+            .set(account.updatedAt, LocalDateTime.now())
+            .where(account.accountId.eq(userId))
+            .execute()
+
+    @Transactional
     fun registerCouple(coupleId: String, userId: String, anniversary: LocalDate, coupleCode: String): Long =
         queryFactory
             .insert(couple)
@@ -67,10 +84,20 @@ class UserRepository(
             .execute()
 
     @Transactional
-    fun updateCouple(coupleId: String, userId: String): Long =
+    fun updateCoupleMappedAccountId(coupleId: String, userId: String): Long =
         queryFactory
             .update(couple)
             .set(couple.mappedAccountId, userId)
+            .set(couple.updatedAt, LocalDateTime.now())
+            .where(couple.coupleId.eq(coupleId))
+            .execute()
+
+    @Transactional
+    fun updateCoupleAnniversary(coupleId: String, anniversary: LocalDate): Long =
+        queryFactory
+            .update(couple)
+            .set(couple.anniversaryDate, anniversary)
+            .set(couple.updatedAt, LocalDateTime.now())
             .where(couple.coupleId.eq(coupleId))
             .execute()
 
