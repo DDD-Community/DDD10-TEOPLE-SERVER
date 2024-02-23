@@ -1,5 +1,6 @@
 package com.ddd.teople.bootstrap.api.auth
 
+import com.ddd.teople.application.global.utils.CodeUtils
 import com.ddd.teople.application.global.utils.JwtUtils
 import com.ddd.teople.bootstrap.BootstrapApplicationTest
 import io.kotest.core.spec.style.BehaviorSpec
@@ -20,7 +21,7 @@ class AuthControllerTest(
     val log = LoggerFactory.getLogger(this::class.java)
 
     Given("먼저, 성공") {
-        val token = JwtUtils.generate(userId = "TEST_USER_ID")
+        val token = JwtUtils.generate(userId = "TEST_USER_ID", coupleId = "TEST_COUPLE_ID")
 
         When("만약, ") {
             mockMvc.get("/auth/token") {
@@ -34,7 +35,7 @@ class AuthControllerTest(
     }
 
     Given("먼저, 실패") {
-        val token = JwtUtils.generate(userId = "TEST_USER_ID")
+        val token = JwtUtils.generate(userId = "TEST_USER_ID", coupleId = "TEST_COUPLE_ID")
 
         When("만약, ") {
             mockMvc.get("/auth/token") {

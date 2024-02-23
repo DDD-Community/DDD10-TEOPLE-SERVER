@@ -4,12 +4,16 @@ import java.io.Serializable
 
 data class TokenInfo(
     val token: String,
-    val userId: String
+    val userId: String,
+    val coupleId: String
 ): Serializable {
 
     companion object {
-        fun of(token: String, userId: String) =
-            TokenInfo(token = token, userId = userId)
+        fun of(token: String, userId: String, coupleId: String): TokenInfo =
+            TokenInfo(
+                token = token,
+                userId = userId,
+                coupleId = coupleId
+            )
     }
-
 }

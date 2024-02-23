@@ -3,7 +3,7 @@ package com.ddd.teople.bootstrap.api.auth
 import com.ddd.teople.application.module.auth.port.`in`.GenerateTokenUseCase
 import com.ddd.teople.bootstrap.api.auth.dto.TokenRequest
 import com.ddd.teople.bootstrap.api.auth.dto.TokenResponse
-import com.ddd.teople.bootstrap.common.dto.CommonResponse
+import com.ddd.teople.bootstrap.global.common.dto.CommonResponse
 import org.slf4j.LoggerFactory
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping

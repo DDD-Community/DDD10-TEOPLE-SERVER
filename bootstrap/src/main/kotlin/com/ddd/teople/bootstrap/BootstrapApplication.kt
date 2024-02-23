@@ -1,7 +1,7 @@
 package com.ddd.teople.bootstrap
 
 import com.ddd.teople.application.global.config.ApplicationScanConfig
-import com.ddd.teople.bootstrap.config.BootstrapScanConfig
+import com.ddd.teople.bootstrap.global.config.BootstrapScanConfig
 import com.ddd.teople.frameworkmysql.config.FrameworkMySqlScanConfig
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

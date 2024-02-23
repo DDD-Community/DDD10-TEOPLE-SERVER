@@ -1,6 +1,8 @@
 package com.ddd.teople.application.global.utils
 
 import com.ddd.teople.application.global.exception.JwtInvalidException
+import com.ddd.teople.application.module.auth.dto.TokenInfo
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -15,27 +17,40 @@ object JwtUtils {
 
     private const val SECRET_KEY = "thisistestusersecretkeyprojectnameisdddteopleoooooooooooo"
 
-    fun generate(userId: String): String =
+    fun generate(userId: String, coupleId: String): String =
         Jwts.builder()
             .setIssuer("teople")
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date.from(LocalDateTime.now().plusDays(1).atZone(ZoneId.systemDefault()).toInstant()))
-            .setSubject(userId)
+            .setClaims(mutableMapOf(
+                "coupleId" to coupleId,
+                "userId" to userId
+            ))
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.toByteArray(StandardCharsets.UTF_8)))
             .compact()
 
-    fun parse(token: String): String =
+    fun verify(token: String): TokenInfo =
         try {
-            Jwts.parserBuilder()
+            val claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.toByteArray(StandardCharsets.UTF_8)))
                 .build()
                 .parseClaimsJws(token)
-                .body.subject
+                .body
+
+            extract(claims = claims)
         }catch (eje: ExpiredJwtException) {
-            log.error("[parse] ExpiredJwtException occurs - e: $eje")
+            log.error("[verify] ExpiredJwtException occurs - e: $eje")
             throw JwtInvalidException("Expired JWT Token")
         }catch (e: Exception) {
-            log.error("[parse] Exception occurs - e: $e")
+            log.error("[verify] Exception occurs - e: $e")
             throw JwtInvalidException()
         }
+
+    private fun extract(claims: Claims): TokenInfo =
+        TokenInfo(
+            token = "",
+            userId = claims.getOrDefault("userId", "").toString(),
+            coupleId = claims.getOrDefault("coupleId", "").toString()
+        )
+
 }

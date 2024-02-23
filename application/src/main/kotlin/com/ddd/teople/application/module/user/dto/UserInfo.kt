@@ -1,19 +1,19 @@
 package com.ddd.teople.application.module.user.dto
 
+import java.time.LocalDate
+
 data class UserInfo(
-    val coupleId: String,
     val userId: String,
-    val coupleCode: String,
-    val accessToken: String
+    val nickName: String,
+    val birth: LocalDate
 ) {
 
     companion object {
-        fun of(coupleId: String, userId: String, coupleCode: String, accessToken: String): UserInfo =
+        fun of(userId: String, nickName: String, birth: LocalDate): UserInfo =
             UserInfo(
-                coupleId = coupleId,
                 userId = userId,
-                coupleCode = coupleCode,
-                accessToken = accessToken
+                nickName = nickName,
+                birth = birth
             )
     }
 }

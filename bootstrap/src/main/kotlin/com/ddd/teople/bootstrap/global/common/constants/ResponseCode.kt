@@ -1,4 +1,4 @@
-package com.ddd.teople.bootstrap.common.constants
+package com.ddd.teople.bootstrap.global.common.constants
 
 enum class ResponseCode(
     val code: String,
@@ -8,5 +8,6 @@ enum class ResponseCode(
     BAD_REQUEST("400", "Bad Request"),
     UNAUTHORIZED("401", "Invalid Token"),
 
-    COUPLE_CODE_NOT_FOUND("T001", "Couple Code Not Found")
+    COUPLE_CODE_NOT_FOUND("T001", "Couple Code Not Found"),
+    DATA_NOT_FOUND("T002", "Data Not Found"),
 }

@@ -2,24 +2,32 @@ package com.ddd.teople.application.module.user
 
 import com.ddd.teople.application.global.exception.CoupleCodeInvalidException
 import com.ddd.teople.application.global.utils.CodeUtils
-import com.ddd.teople.application.global.utils.JwtUtils
+import com.ddd.teople.application.module.auth.port.`in`.GenerateTokenUseCase
+import com.ddd.teople.application.module.map.port.`in`.FindMapUseCase
 import com.ddd.teople.application.module.user.dto.RegisterUserCnd
-import com.ddd.teople.application.module.user.dto.UserInfo
-import com.ddd.teople.application.module.user.port.`in`.RegisterUseCase
+import com.ddd.teople.application.module.user.dto.RegisteredUserInfo
+import com.ddd.teople.application.module.user.dto.MyInfo
+import com.ddd.teople.application.module.user.port.`in`.FindUserUseCase
+import com.ddd.teople.application.module.user.port.`in`.RegisterUserUseCase
 import com.ddd.teople.application.module.user.port.out.LoadUserPort
 import com.ddd.teople.application.module.user.port.out.PostUserPort
 import org.slf4j.LoggerFactory
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.Period
+import java.time.temporal.ChronoUnit
 
 @Service
 class UserService(
     private val postUserPort: PostUserPort,
-    private val loadUserPort: LoadUserPort
-): RegisterUseCase {
+    private val loadUserPort: LoadUserPort,
+
+    private val generateTokenUseCase: GenerateTokenUseCase,
+    private val findMapUseCase: FindMapUseCase
+): RegisterUserUseCase, FindUserUseCase {
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    override fun register(input: RegisterUserCnd): UserInfo {
+    override fun register(input: RegisterUserCnd): RegisteredUserInfo {
         // 사용자 등록
         val userId = CodeUtils.generateId(digitNum = 20, randUpperCase = false)
         postUserPort.registerUser(userId = userId, nickName = input.nickName, birth = input.birth)
@@ -52,13 +60,37 @@ class UserService(
         }
 
         // 엑세스토큰 발급
-        val token = JwtUtils.generate(userId = userId)
+        val tokenInfo = generateTokenUseCase.issueToken(userId = userId, coupleId = coupleId)
 
-        return UserInfo.of(
+        return RegisteredUserInfo.of(
             coupleId = coupleId,
             userId = userId,
             coupleCode = coupleCode,
-            accessToken = token
+            accessToken = tokenInfo.token
+        )
+    }
+
+    override fun findUser(userId: String, coupleId: String): MyInfo {
+        val coupleInfo = loadUserPort.findCoupleById(coupleId = coupleId)
+        val dDay = ChronoUnit.DAYS.between(coupleInfo.anniversaryDate, LocalDate.now()).toInt()
+
+        val myInfo = loadUserPort.findUserInfoById(userId = userId)
+        val yourInfo = loadUserPort.findUserInfoById(userId = if(coupleInfo.mappingAccountId == userId) coupleInfo.mappedAccountId else coupleInfo.mappingAccountId)
+
+        val myMap = findMapUseCase.findMapList(coupleId = coupleId, userId = myInfo.userId)
+        val yourMap = findMapUseCase.findMapList(coupleId = coupleId, userId = yourInfo.userId)
+        val togetherMap = myMap.filter { mine -> yourMap.map { yours -> yours.thirdMapId }.contains(mine.thirdMapId) }
+
+        return MyInfo(
+            coupleId = coupleInfo.coupleId,
+            anniversary = coupleInfo.anniversaryDate,
+            dDay = dDay,
+            myInfo = MyInfo.UserItem.of(input = myInfo),
+            yourInfo = MyInfo.UserItem.of(input = yourInfo),
+
+            myMap = myMap.map { MyInfo.MapItem.of(input = it) },
+            yourMap = yourMap.map { MyInfo.MapItem.of(input = it) },
+            togetherMap = togetherMap.map { MyInfo.MapItem.of(input = it) }
         )
     }
 }

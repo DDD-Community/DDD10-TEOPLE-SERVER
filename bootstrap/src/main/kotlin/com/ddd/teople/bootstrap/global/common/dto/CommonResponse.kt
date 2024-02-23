@@ -1,6 +1,6 @@
-package com.ddd.teople.bootstrap.common.dto
+package com.ddd.teople.bootstrap.global.common.dto
 
-import com.ddd.teople.bootstrap.common.constants.ResponseCode
+import com.ddd.teople.bootstrap.global.common.constants.ResponseCode
 import java.io.Serializable
 
 data class CommonResponse<T> (

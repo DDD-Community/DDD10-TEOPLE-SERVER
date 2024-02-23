@@ -18,5 +18,5 @@ interface GenerateTokenUseCase {
      * @param userId
      * @return [String] - 신규발급 토큰
      */
-    fun issueToken(userId: String): TokenInfo
+    fun issueToken(userId: String, coupleId: String): TokenInfo
 }

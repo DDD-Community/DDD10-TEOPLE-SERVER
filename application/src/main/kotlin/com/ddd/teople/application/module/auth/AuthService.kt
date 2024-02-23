@@ -9,10 +9,19 @@ import org.springframework.stereotype.Service
 class AuthService: GenerateTokenUseCase {
 
     override fun reIssueToken(token: String): TokenInfo {
-        val userId = JwtUtils.parse(token = token)
-        return TokenInfo.of(token = JwtUtils.generate(userId = userId), userId = userId)
+        val tokenInfo = JwtUtils.verify(token = token)
+        val newToken = JwtUtils.generate(
+            userId = tokenInfo.userId,
+            coupleId = tokenInfo.coupleId
+        )
+
+        return TokenInfo.of(token = newToken, userId = tokenInfo.userId, coupleId = tokenInfo.coupleId)
     }
 
-    override fun issueToken(userId: String): TokenInfo =
-        TokenInfo.of(token = JwtUtils.generate(userId = userId), userId = userId)
+    override fun issueToken(userId: String, coupleId: String): TokenInfo =
+        TokenInfo.of(
+            token = JwtUtils.generate(userId = userId, coupleId = coupleId),
+            userId = userId,
+            coupleId = coupleId
+        )
 }

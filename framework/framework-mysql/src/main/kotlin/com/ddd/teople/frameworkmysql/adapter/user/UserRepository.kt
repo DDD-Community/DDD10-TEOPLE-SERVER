@@ -1,5 +1,6 @@
 package com.ddd.teople.frameworkmysql.adapter.user
 
+import com.ddd.teople.frameworkmysql.entity.Account
 import com.ddd.teople.frameworkmysql.entity.Couple
 import com.ddd.teople.frameworkmysql.entity.QAccount
 import com.ddd.teople.frameworkmysql.entity.QCouple
@@ -38,6 +39,13 @@ class UserRepository(
             )
             .execute()
 
+    @Transactional(readOnly = true)
+    fun findUser(userId: String): Account? =
+        queryFactory
+            .selectFrom(account)
+            .where(account.accountId.eq(userId))
+            .fetchFirst()
+
     @Transactional
     fun registerCouple(coupleId: String, userId: String, anniversary: LocalDate, coupleCode: String): Long =
         queryFactory
@@ -66,11 +74,17 @@ class UserRepository(
             .where(couple.coupleId.eq(coupleId))
             .execute()
 
-
     @Transactional(readOnly = true)
     fun findCoupleByCode(coupleCode: String): Couple? =
         queryFactory
             .selectFrom(couple)
             .where(couple.coupleCode.eq(coupleCode))
+            .fetchFirst()
+
+    @Transactional(readOnly = true)
+    fun findCoupleById(coupleId: String): Couple? =
+        queryFactory
+            .selectFrom(couple)
+            .where(couple.coupleId.eq(coupleId))
             .fetchFirst()
 }
