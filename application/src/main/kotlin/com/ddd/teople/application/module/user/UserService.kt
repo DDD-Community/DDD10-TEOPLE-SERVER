@@ -75,9 +75,7 @@ class UserService(
         val myInfo = loadUserPort.findUserInfoById(userId = userId)
         val yourInfo = loadUserPort.findUserInfoById(userId = if(coupleInfo.mappingAccountId == userId) coupleInfo.mappedAccountId else coupleInfo.mappingAccountId)
 
-        val myMap = findMapUseCase.findMapList(coupleId = coupleId, userId = myInfo.userId)
-        val yourMap = findMapUseCase.findMapList(coupleId = coupleId, userId = yourInfo.userId)
-        val togetherMap = myMap.filter { mine -> yourMap.map { yours -> yours.thirdMapId }.contains(mine.thirdMapId) }
+        val mapInfo = findMapUseCase.findMapInfo(userId = userId, coupleInfo = coupleInfo)
 
         return MyInfo(
             coupleId = coupleInfo.coupleId,
@@ -86,11 +84,14 @@ class UserService(
             myInfo = MyInfo.UserItem.of(input = myInfo),
             yourInfo = MyInfo.UserItem.of(input = yourInfo),
 
-            myMap = myMap.map { MyInfo.MapItem.of(input = it) },
-            yourMap = yourMap.map { MyInfo.MapItem.of(input = it) },
-            togetherMap = togetherMap.map { MyInfo.MapItem.of(input = it) }
+            myMap = mapInfo.myMap.map { MyInfo.MapItem.of(input = it) },
+            yourMap = mapInfo.yourMap.map { MyInfo.MapItem.of(input = it) },
+            togetherMap = mapInfo.togetherMap.map { MyInfo.MapItem.of(input = it) }
         )
     }
+
+    override fun findCouple(coupleId: String): CoupleInfo =
+        loadUserPort.findCoupleById(coupleId = coupleId)
 
     override fun update(input: UpdateUserCnd): UpdatedUserInfo {
         if(!input.nickName.isNullOrEmpty()) {

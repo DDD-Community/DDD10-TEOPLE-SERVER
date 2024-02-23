@@ -19,5 +19,15 @@ data class MapInfo(
                 latitude = latitude,
                 longitude = longitude
             )
+
+        fun of(mapId: String, input: RegisterMapCnd): MapInfo =
+            MapInfo(
+                mapId = mapId,
+                coupleId = input.coupleId,
+                userId = input.userId,
+                thirdMapId = input.thirdMapId,
+                latitude = input.lat,
+                longitude = input.lng
+            )
     }
 }
