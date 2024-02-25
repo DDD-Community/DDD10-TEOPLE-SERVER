@@ -28,3 +28,29 @@ mysql:
     password: root
 
 ---
+
+spring:
+  config:
+    activate:
+      on-profile: deploy
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    generate-ddl: true
+  datasource:
+    hikari:
+      connection-timeout: 5000
+      minimum-idle: 10
+      maximum-pool-size: 100
+
+hibernate:
+  show_sql: false
+  format_sql: false
+  physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+mysql:
+  teople:
+    url: jdbc:mysql://146.56.113.143:3306/TEOPLE?serverTimezone=UTC
+    username: root
+    password: root

@@ -5,14 +5,16 @@ import java.io.Serializable
 
 data class TokenResponse(
     val token: String,
-    val userId: String
+    val userId: String,
+    val coupleId: String
 ): Serializable {
 
     companion object {
         fun of(input: TokenInfo): TokenResponse =
             TokenResponse(
                 token = input.token,
-                userId = input.userId
+                userId = input.userId,
+                coupleId = input.coupleId
             )
     }
 }

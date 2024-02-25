@@ -3,3 +3,8 @@ spring:
   profiles:
     active: local
     include: framework-mysql
+
+springdoc:
+  default-consumes-media-type: application/json
+  swagger-ui:
+    path: /swagger-ui.html
