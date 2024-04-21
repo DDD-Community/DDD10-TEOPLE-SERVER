@@ -7,6 +7,7 @@ enum class ResponseCode(
     SUCCESS("0", "Success"),
     BAD_REQUEST("400", "Bad Request"),
     UNAUTHORIZED("401", "Invalid Token"),
+    SERVER_ERROR("500", "Internal Server Error"),
 
     COUPLE_CODE_NOT_FOUND("T001", "Couple Code Not Found"),
     DATA_NOT_FOUND("T002", "Data Not Found"),

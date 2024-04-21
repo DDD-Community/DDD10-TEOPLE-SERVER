@@ -13,8 +13,8 @@ spring:
   datasource:
     hikari:
       connection-timeout: 5000
-      minimum-idle: 10
-      maximum-pool-size: 100
+      minimum-idle: 2
+      maximum-pool-size: 5
 
 hibernate:
   show_sql: false
@@ -34,15 +34,15 @@ spring:
     activate:
       on-profile: deploy
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
-    generate-ddl: true
+    generate-ddl: false
   datasource:
     hikari:
       connection-timeout: 5000
-      minimum-idle: 10
-      maximum-pool-size: 100
+      minimum-idle: 2
+      maximum-pool-size: 5
 
 hibernate:
   show_sql: false

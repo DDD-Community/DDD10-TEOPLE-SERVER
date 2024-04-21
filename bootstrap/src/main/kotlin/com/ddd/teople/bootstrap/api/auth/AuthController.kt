@@ -23,8 +23,6 @@ class AuthController(
      */
     @GetMapping("/auth/token")
     fun token(@Validated input: TokenRequest): CommonResponse<TokenResponse> {
-        log.info("[token] input: $input")
-
         val result = generateTokenUseCase.reIssueToken(input.token)
         return CommonResponse.success(data = TokenResponse.of(input = result))
     }
