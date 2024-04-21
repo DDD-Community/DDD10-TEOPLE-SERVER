@@ -9,6 +9,7 @@ import com.ddd.teople.bootstrap.global.common.exception.AuthenticationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.validation.BindException
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -21,50 +22,80 @@ class CommonExceptionHandler {
     @ExceptionHandler(BindException::class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    fun bindException(e: BindException): CommonResponse<Nothing> =
+    fun handleBindException(e: BindException): CommonResponse<Nothing> =
         CommonResponse(
             code = ResponseCode.BAD_REQUEST.code,
             message = ResponseCode.BAD_REQUEST.message,
             data = null
-        ).also { log.error("[BindException] Exception occurs - message: {}", e.message, e) }
+        ).also { log.error("[BindException] Exception occurs - message: {}", e.message) }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): CommonResponse<Nothing> =
+        CommonResponse(
+            code = ResponseCode.BAD_REQUEST.code,
+            message = ResponseCode.BAD_REQUEST.message,
+            data = null
+        ).also { log.error("[MethodArgumentNotValidException] Exception occurs - message: {}", e.message) }
 
     @ExceptionHandler(JwtInvalidException::class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    fun jwtInvalidException(e: JwtInvalidException): CommonResponse<Nothing> =
+    fun handleJwtInvalidException(e: JwtInvalidException): CommonResponse<Nothing> =
         CommonResponse(
             code = ResponseCode.UNAUTHORIZED.code,
-            message = if(e.message.isNullOrEmpty()) ResponseCode.UNAUTHORIZED.message else e.message!!,
+            message = ResponseCode.UNAUTHORIZED.message,
             data = null
-        ).also { log.error("[JwtInvalidException] Exception occurs - message: {}", e.message, e) }
+        ).also { log.error("[JwtInvalidException] Exception occurs - message: {}", e.message) }
 
     @ExceptionHandler(AuthenticationException::class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    fun authenticationException(e: AuthenticationException): CommonResponse<Nothing> =
+    fun handleAuthenticationException(e: AuthenticationException): CommonResponse<Nothing> =
         CommonResponse(
             code = ResponseCode.UNAUTHORIZED.code,
-            message = if(e.message.isNullOrEmpty()) ResponseCode.UNAUTHORIZED.message else e.message!!,
+            message = ResponseCode.UNAUTHORIZED.message,
             data = null
-        ).also { log.error("[AuthenticationException] Exception occurs - message: {}", e.message, e) }
+        ).also { log.error("[AuthenticationException] Exception occurs - message: {}", e.message) }
 
     @ExceptionHandler(CoupleCodeInvalidException::class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    fun coupleCodeInvalidException(e: CoupleCodeInvalidException): CommonResponse<Nothing> =
+    fun handleCoupleCodeInvalidException(e: CoupleCodeInvalidException): CommonResponse<Nothing> =
         CommonResponse(
             code = ResponseCode.COUPLE_CODE_NOT_FOUND.code,
-            message = if(e.message.isNullOrEmpty()) ResponseCode.COUPLE_CODE_NOT_FOUND.message else e.message!!,
+            message = ResponseCode.COUPLE_CODE_NOT_FOUND.code,
             data = null
-        ).also { log.error("[CoupleCodeInvalidException] Exception occurs - message: {}", e.message, e) }
+        ).also { log.error("[CoupleCodeInvalidException] Exception occurs - message: {}", e.message) }
 
     @ExceptionHandler(DataNotFoundException::class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    fun dataNotFoundException(e: DataNotFoundException): CommonResponse<Nothing> =
+    fun handleDataNotFoundException(e: DataNotFoundException): CommonResponse<Nothing> =
         CommonResponse(
             code = ResponseCode.DATA_NOT_FOUND.code,
-            message = if(e.message.isNullOrEmpty()) ResponseCode.DATA_NOT_FOUND.message else e.message!!,
+            message = ResponseCode.DATA_NOT_FOUND.code,
             data = null
-        ).also { log.error("[DataNotFoundException] Exception occurs - message: {}", e.message, e) }
+        ).also { log.error("[DataNotFoundException] Exception occurs - message: {}", e.message) }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    fun handleIllegalArgumentException(e: IllegalArgumentException): CommonResponse<Nothing> =
+        CommonResponse(
+            code = ResponseCode.BAD_REQUEST.code,
+            message = ResponseCode.BAD_REQUEST.code,
+            data = null
+        ).also { log.error("[IllegalArgumentException] Exception occurs - message: {}", e.message) }
+
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    fun handleException(e: Exception): CommonResponse<Nothing> =
+        CommonResponse(
+            code = ResponseCode.SERVER_ERROR.code,
+            message = ResponseCode.SERVER_ERROR.code,
+            data = null
+        ).also { log.error("[Exception] Exception occurs - message: {}", e.message) }
 }
